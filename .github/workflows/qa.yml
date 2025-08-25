@@ -8,19 +8,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
-      # ⬇️ use install (creates package-lock.json)
+      # Install dependencies (creates package-lock.json automatically)
       - run: npm install
 
+      # Install browsers Playwright needs
       - run: npx playwright install --with-deps
-      - run: npm run urls           # collects pages from https://rareskills.io/sitemap.xml
-      - run: npm run scan           # runs the checks (desktop + mobile)
 
+      # Collect URLs from your sitemap and scan them
+      - run: npm run urls
+      - run: npm run scan
+
+      # Downloadable HTML report
       - uses: actions/upload-artifact@v4
         with:
           name: playwright-report
